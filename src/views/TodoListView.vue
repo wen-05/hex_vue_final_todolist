@@ -16,6 +16,8 @@ const nickname = document.cookie.replace(
     "$1",
 );
 
+let isDisabled = ref(false);
+
 // 驗證登入
 onMounted(async () => {
     try {
@@ -39,6 +41,7 @@ onMounted(async () => {
 
 // 登出
 const signOut = async () => {
+    isDisabled = true;
     try {
         const res = await fetch(`${url}/users/sign_out`, {
             method: 'POST',
@@ -55,6 +58,8 @@ const signOut = async () => {
         }
     } catch (err) {
         console.log(err.message);
+    } finally {
+        isDisabled = false;
     }
 }
 
@@ -86,6 +91,8 @@ const addTodo = async () => {
         return;
     }
 
+    isDisabled = true;
+
     try {
         const res = await fetch(`${url}/todos`, {
             method: 'POST',
@@ -111,6 +118,8 @@ const addTodo = async () => {
         }
     } catch (err) {
         console.log(err.message);
+    } finally {
+        isDisabled = false;
     }
 }
 
@@ -126,6 +135,8 @@ const editTodo = async (id, index) => {
         alert('內容不可空白');
         return;
     }
+
+    isDisabled = true;
 
     try {
         const res = await fetch(`${url}/todos/${id}`, {
@@ -147,10 +158,14 @@ const editTodo = async (id, index) => {
         }
     } catch (err) {
         console.log(err.message);
+    } finally {
+        isDisabled = false;
     }
 }
 
 const delTodo = async (id) => {
+    isDisabled = true;
+
     try {
         const res = await fetch(`${url}/todos/${id}`, {
             method: 'DELETE',
@@ -168,6 +183,8 @@ const delTodo = async (id) => {
         }
     } catch (err) {
         console.log(err.message);
+    } finally {
+        isDisabled = false;
     }
 }
 
@@ -218,7 +235,7 @@ const filteredTodos = computed(() => {
                     <RouterLink to="/todo"><span>{{ nickname }}的代辦</span></RouterLink>
                 </li>
                 <li>
-                    <a href="#" @click.prevent="signOut">登出</a>
+                    <a href="#" @click.prevent="signOut" :disabled="isDisabled">登出</a>
                 </li>
             </ul>
         </nav>
@@ -226,7 +243,7 @@ const filteredTodos = computed(() => {
             <div class="todoList_Content">
                 <div class="inputBox">
                     <input v-model="newItem" type="text" placeholder="請輸入待辦事項">
-                    <a @click.prevent="addTodo" href="#">
+                    <a @click.prevent="addTodo" href="#" :disabled="isDisabled">
                         <i class="fa fa-plus"></i>
                     </a>
                 </div>
@@ -256,10 +273,10 @@ const filteredTodos = computed(() => {
                                         :checked="todo.status">
                                     <span>{{ todo.content }}</span>
                                 </label>
-                                <a @click.prevent="editTodo(todo.id, index)" href="#">
+                                <a @click.prevent="editTodo(todo.id, index)" href="#" :disabled="isDisabled">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
-                                <a @click.prevent="delTodo(todo.id)" href="#">
+                                <a @click.prevent="delTodo(todo.id)" href="#" :disabled="isDisabled">
                                     <i class="fa fa-times"></i>
                                 </a>
                             </li>
