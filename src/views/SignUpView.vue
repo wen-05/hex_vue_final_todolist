@@ -9,6 +9,8 @@ const registerField = ref({
     confirmPassword: ''
 });
 
+let isDisabled = ref(false);
+
 const url = import.meta.env.VITE_API_URL;
 const router = useRouter();
 
@@ -33,6 +35,8 @@ const registerAccount = async () => {
         return;
     }
 
+    isDisabled = true;
+
     try {
         const res = await fetch(`${url}/users/sign_up`, {
             method: 'POST',
@@ -52,6 +56,8 @@ const registerAccount = async () => {
 
     } catch (err) {
         console.log("error" + err);
+    } finally {
+        isDisabled = false;
     }
 }
 </script>
@@ -89,7 +95,7 @@ const registerAccount = async () => {
                     <input v-model="registerField.confirmPassword" class="formControls_input" type="password"
                         name="confirm_pwd" id="confirm_pwd" placeholder="請再次輸入密碼" required>
 
-                    <input @click="registerAccount" class="formControls_btnSubmit" type="button" value="註冊帳號">
+                    <input @click="registerAccount" class="formControls_btnSubmit" type="button" value="註冊帳號" :disabled="isDisabled">
                     <RouterLink to="/login" class="formControls_btnLink">登入</RouterLink>
                 </form>
             </div>

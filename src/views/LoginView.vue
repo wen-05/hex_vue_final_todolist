@@ -7,6 +7,8 @@ const loginField = ref({
     password: ''
 })
 
+let isDisabled = ref(false);
+
 const url = import.meta.env.VITE_API_URL;
 const router = useRouter();
 const dashboard = async () => {
@@ -15,6 +17,8 @@ const dashboard = async () => {
         alert("所有欄位為必填，請確實填寫!");
         return;
     }
+
+    isDisabled = true;
 
     try {
         const res = await fetch(`${url}/users/sign_in`, {
@@ -49,6 +53,8 @@ const dashboard = async () => {
 
     } catch (err) {
         console.log("error" + err);
+    } finally {
+        isDisabled = false;
     }
 }
 </script>
@@ -78,7 +84,7 @@ const dashboard = async () => {
                         placeholder="請輸入密碼" required>
                     <span>密碼長度至少六個字元</span>
 
-                    <input @click="dashboard" class="formControls_btnSubmit" type="button" value="登入">
+                    <input @click="dashboard" class="formControls_btnSubmit" type="button" value="登入" :disabled="isDisabled">
                     <RouterLink to="/signup" class="formControls_btnLink">註冊帳號</RouterLink>
                 </form>
             </div>
