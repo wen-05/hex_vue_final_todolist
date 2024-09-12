@@ -80,7 +80,8 @@ const getTodo = async () => {
 }
 
 const addTodo = async () => {
-    if (newItem.value === '') {
+    const itemContent = newItem.value.trim();
+    if (!itemContent) {
         alert('欄位不可空白');
         return;
     }
@@ -93,14 +94,17 @@ const addTodo = async () => {
                 Authorization: token
             },
             body: JSON.stringify({
-                content: newItem.value
+                content: itemContent
             })
         })
 
         if (res.ok) {
-            getTodo();
+            const data = await res.json();
+            const getNewContent = data.newTodo;
+            todos.value.push(getNewContent);
+            
             newItem.value = '';
-            alert('新增成功')
+            alert('新增成功');
             statusTodos.value = 'all';
         } else {
             alert('新增失敗')
@@ -110,7 +114,7 @@ const addTodo = async () => {
     }
 }
 
-const editTodo = async (id) => {
+const editTodo = async (id, index) => {
     const newItemContent = prompt('請輸入修改內容文字:')
 
     if (newItemContent === null) {
@@ -136,7 +140,7 @@ const editTodo = async (id) => {
         })
 
         if (res.ok) {
-            getTodo();
+            todos.value[index].content = newItemContent;
             alert('更新成功');
         } else {
             alert('更新失敗');
@@ -157,8 +161,8 @@ const delTodo = async (id) => {
 
         const result = await res.json();
         if (res.ok) {
+            todos.value = todos.value.filter(todo => todo.id !== id);
             alert(result.message)
-            getTodo();
         } else {
             alert(result.message)
         }
@@ -246,13 +250,13 @@ const filteredTodos = computed(() => {
                     </ul>
                     <div class="todoList_items">
                         <ul class="todoList_item">
-                            <li v-for="todo in filteredTodos" :key="todo.id">
+                            <li v-for="(todo, index) in filteredTodos" :key="todo.id">
                                 <label class="todoList_label">
                                     <input class="todoList_input" type="checkbox" @click="toggleTodo(todo.id)"
                                         :checked="todo.status">
                                     <span>{{ todo.content }}</span>
                                 </label>
-                                <a @click.prevent="editTodo(todo.id)" href="#">
+                                <a @click.prevent="editTodo(todo.id, index)" href="#">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
                                 <a @click.prevent="delTodo(todo.id)" href="#">
