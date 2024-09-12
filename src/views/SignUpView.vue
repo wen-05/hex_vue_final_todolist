@@ -13,8 +13,20 @@ const url = import.meta.env.VITE_API_URL;
 const router = useRouter();
 
 const registerAccount = async () => {
-    const check = (registerField.value.password !== registerField.value.confirmPassword)
-    if (check) {
+    const {email, nickname, password, confirmPassword} = registerField.value;
+    if (!email || !nickname || !password || !confirmPassword) {
+        alert("欄位皆為必填，請確實填寫!");
+        return;
+    }
+
+    if (password.length < 6 ) {
+        alert("密碼長度至少六個字");
+        registerField.value.password = '';
+        registerField.value.confirmPassword = '';
+        return;
+    }
+
+    if (password !== confirmPassword) {
         alert("密碼與確認密碼不一致");
         registerField.value.password = '';
         registerField.value.confirmPassword = '';

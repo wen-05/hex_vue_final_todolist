@@ -10,6 +10,12 @@ const loginField = ref({
 const url = import.meta.env.VITE_API_URL;
 const router = useRouter();
 const dashboard = async () => {
+    const {email, password} = loginField.value;
+    if (!email || !password){
+        alert("所有欄位為必填，請確實填寫!");
+        return;
+    }
+
     try {
         const res = await fetch(`${url}/users/sign_in`, {
             method: 'POST',
