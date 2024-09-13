@@ -41,7 +41,6 @@ onMounted(async () => {
 
 // 登出
 const signOut = async () => {
-    isDisabled.value = true;
     try {
         const res = await fetch(`${url}/users/sign_out`, {
             method: 'POST',
@@ -58,8 +57,6 @@ const signOut = async () => {
         }
     } catch (err) {
         console.log(err.message);
-    } finally {
-        isDisabled.value = false;
     }
 }
 
@@ -109,7 +106,7 @@ const addTodo = async () => {
             const data = await res.json();
             const getNewContent = data.newTodo;
             todos.value.push(getNewContent);
-            
+
             newItem.value = '';
             alert('新增成功');
             statusTodos.value = 'all';
@@ -235,7 +232,7 @@ const filteredTodos = computed(() => {
                     <RouterLink to="/todo"><span>{{ nickname }}的代辦</span></RouterLink>
                 </li>
                 <li>
-                    <a href="#" @click.prevent="signOut" :disabled="isDisabled">登出</a>
+                    <a @click.prevent.once="signOut">登出</a>
                 </li>
             </ul>
         </nav>
@@ -243,7 +240,7 @@ const filteredTodos = computed(() => {
             <div class="todoList_Content">
                 <div class="inputBox">
                     <input v-model="newItem" type="text" placeholder="請輸入待辦事項">
-                    <a @click.prevent="addTodo" href="#" :disabled="isDisabled">
+                    <a @click.prevent="isDisabled ? null : addTodo">
                         <i class="fa fa-plus"></i>
                     </a>
                 </div>
@@ -273,10 +270,10 @@ const filteredTodos = computed(() => {
                                         :checked="todo.status">
                                     <span>{{ todo.content }}</span>
                                 </label>
-                                <a @click.prevent="editTodo(todo.id, index)" href="#" :disabled="isDisabled">
+                                <a @click.prevent="isDisabled ? null : editTodo(todo.id, index)">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
-                                <a @click.prevent="delTodo(todo.id)" href="#" :disabled="isDisabled">
+                                <a @click.prevent="isDisabled ? null : delTodo(todo.id)">
                                     <i class="fa fa-times"></i>
                                 </a>
                             </li>
