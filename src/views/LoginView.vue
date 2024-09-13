@@ -18,7 +18,7 @@ const dashboard = async () => {
         return;
     }
 
-    isDisabled = true;
+    isDisabled.value = true;
 
     try {
         const res = await fetch(`${url}/users/sign_in`, {
@@ -54,7 +54,7 @@ const dashboard = async () => {
     } catch (err) {
         console.log("error" + err);
     } finally {
-        isDisabled = false;
+        isDisabled.value = false;
     }
 }
 </script>

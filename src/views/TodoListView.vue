@@ -41,7 +41,7 @@ onMounted(async () => {
 
 // 登出
 const signOut = async () => {
-    isDisabled = true;
+    isDisabled.value = true;
     try {
         const res = await fetch(`${url}/users/sign_out`, {
             method: 'POST',
@@ -59,7 +59,7 @@ const signOut = async () => {
     } catch (err) {
         console.log(err.message);
     } finally {
-        isDisabled = false;
+        isDisabled.value = false;
     }
 }
 
@@ -91,7 +91,7 @@ const addTodo = async () => {
         return;
     }
 
-    isDisabled = true;
+    isDisabled.value = true;
 
     try {
         const res = await fetch(`${url}/todos`, {
@@ -119,7 +119,7 @@ const addTodo = async () => {
     } catch (err) {
         console.log(err.message);
     } finally {
-        isDisabled = false;
+        isDisabled.value = false;
     }
 }
 
@@ -136,7 +136,7 @@ const editTodo = async (id, index) => {
         return;
     }
 
-    isDisabled = true;
+    isDisabled.value = true;
 
     try {
         const res = await fetch(`${url}/todos/${id}`, {
@@ -159,12 +159,12 @@ const editTodo = async (id, index) => {
     } catch (err) {
         console.log(err.message);
     } finally {
-        isDisabled = false;
+        isDisabled.value = false;
     }
 }
 
 const delTodo = async (id) => {
-    isDisabled = true;
+    isDisabled.value = true;
 
     try {
         const res = await fetch(`${url}/todos/${id}`, {
@@ -184,7 +184,7 @@ const delTodo = async (id) => {
     } catch (err) {
         console.log(err.message);
     } finally {
-        isDisabled = false;
+        isDisabled.value = false;
     }
 }
 
