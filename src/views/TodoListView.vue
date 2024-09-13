@@ -240,7 +240,7 @@ const filteredTodos = computed(() => {
             <div class="todoList_Content">
                 <div class="inputBox">
                     <input v-model="newItem" type="text" placeholder="請輸入待辦事項">
-                    <a @click.prevent="isDisabled ? null : addTodo">
+                    <a @click.prevent="isDisabled ? null : addTodo()">
                         <i class="fa fa-plus"></i>
                     </a>
                 </div>
