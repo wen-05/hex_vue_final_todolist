@@ -36,7 +36,7 @@ const dashboard = async () => {
             document.cookie = `authNickname=${nickname}; expires=${exp}; path=/ `;
             
             alert("登入成功");
-            router.push('/todo')
+            router.push(`/${nickname}/todo`)
         } else {
             switch (res.status) {
                 case 400:
